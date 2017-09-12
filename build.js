@@ -1,17 +1,30 @@
 var gulp = require('gulp');
 var pandoc = require('gulp-pp-pandoc');
+var fs = require('fs');
 var path = require('path');
+var extMap = require('./ext-map');
+const getExt = (format) => (extMap[format] || format);
+
 const _build = (src, dest, option) =>
     gulp.src(src)
     .pipe(pandoc(option))
     .pipe(gulp.dest(dest));
 
-const _watch = (src, dest, option) =>
-    gulp.watch(src, function (stat) {
-        if(stat.type !== 'unlink') {
-            _build(stat.path, dest, option)
-        }
-    })
+const _watch = (src, dest, option, srcPath, distPath) => {
+    const watcher = gulp.watch(src, {cwd: process.cwd()});
+    watcher.on('change', function(path, stats) {
+        _build(path, dest, option)
+      });
+      
+    watcher.on('unlink', function(p, stats) {
+        const target = path.resolve(process.cwd(), p).replace(srcPath, distPath).replace(getExt(option.from), getExt(option.to));
+        fs.unlink(target, (err) => {
+            if(err) {
+                console.log(err);
+            }
+        });
+    });
+}
 const getOption = (format) => ({
     from: 'markdown',
     to: format,
@@ -36,5 +49,5 @@ module.exports = function ({
         args: []
     }];
     _build(...args);
-    if (watch) _watch(...args);
+    if (watch) _watch(...args, srcPath, distPath);
 }
