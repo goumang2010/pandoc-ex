@@ -14,8 +14,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "gulp": "^3.9.1",
-    "gulp-pp-pandoc": "^0.0.1",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-pp-pandoc": "^0.1.0",
+    "gulp-watch": "^4.3.11",
     "inquirer": "^3.2.1",
     "minimist": "^1.2.0",
     "ora": "^0.3.0"
