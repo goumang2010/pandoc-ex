@@ -15,7 +15,9 @@ const _watch = (src, dest, option, srcPath, distPath) => {
     watcher.on('change', function(path, stats) {
         _build(path, dest, option)
       });
-      
+    watcher.on('add', function(path, stats) {
+        _build(path, dest, option)
+    });
     watcher.on('unlink', function(p, stats) {
         const target = path.resolve(process.cwd(), p).replace(srcPath, distPath).replace(getExt(option.from), getExt(option.to));
         fs.unlink(target, (err) => {
