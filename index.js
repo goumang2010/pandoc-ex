@@ -76,7 +76,9 @@ async function main() {
     const src = await getSrcFolder(argv.src);
     const dist = await getDistFolder(argv.dist);
     const macro = await getMacroFile(argv.macro);
-    const spinner = ora(`${watch ? 'Watching' : 'Writing'} markdown files: ${src} ...`).start();
+    console.log(`Source files folder:`, src);
+    console.log(`Dist files folder:`, dist);
+    const spinner = ora(`${watch ? 'Watching' : 'Writing'} markdown files ...`).start();
     await build({
         src,
         dist,
