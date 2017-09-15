@@ -27,12 +27,6 @@ const _watch = (src, dest, option, srcPath, distPath) => {
         });
     });
 }
-const getOption = (format) => ({
-    from: 'markdown',
-    to: format,
-    ext: `.${format}`,
-    args: []
-});
 
 module.exports = function ({
     src,
