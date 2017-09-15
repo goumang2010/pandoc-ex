@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "gulp": "github:gulpjs/gulp#4.0",
-    "gulp-pp-pandoc": "^0.1.1",
+    "gulp-pdc": "^0.0.1",
     "gulp-watch": "^4.3.11",
     "inquirer": "^3.2.1",
     "minimist": "^1.2.0",

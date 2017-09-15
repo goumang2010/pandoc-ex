@@ -1,5 +1,5 @@
 var gulp = require('gulp');
-var pandoc = require('gulp-pp-pandoc');
+var pandoc = require('gulp-pdc');
 var fs = require('fs');
 var path = require('path');
 var extMap = require('./ext-map');
