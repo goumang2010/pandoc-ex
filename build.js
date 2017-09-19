@@ -5,18 +5,25 @@ var path = require('path');
 var extMap = require('./ext-map');
 const getExt = (format) => (extMap[format] || format);
 
-const _build = (src, dest, option) =>
-    gulp.src(src)
-    .pipe(pandoc(option))
-    .pipe(gulp.dest(dest));
+const _build = via => via ?
+    (src, dest, option) =>
+        gulp.src(src)
+            .pipe(pandoc(Object.assign({}, option, { to: via })))
+            .pipe(pandoc(Object.assign({}, option, { from: via })))
+            .pipe(gulp.dest(dest))
+    :
+    (src, dest, option) =>
+        gulp.src(src)
+            .pipe(pandoc(option))
+            .pipe(gulp.dest(dest));
 
-const _watch = (src, dest, option, srcPath, distPath) => {
+const _watch = build => (src, dest, option, srcPath, distPath) => {
     const watcher = gulp.watch(src, {cwd: process.cwd()});
     watcher.on('change', function(path, stats) {
-        _build(path, dest, option)
+        build(path, dest, option)
       });
     watcher.on('add', function(path, stats) {
-        _build(path, dest, option)
+        build(path, dest, option)
     });
     watcher.on('unlink', function(p, stats) {
         const target = path.resolve(process.cwd(), p).replace(srcPath, distPath).replace(getExt(option.from), getExt(option.to));
@@ -33,7 +40,8 @@ module.exports = function ({
     dist,
     format,
     macro,
-    watch
+    watch,
+    via
 }) {
     const srcPath = typeof src === 'string' ? src : src.fullpath;
     const distPath = typeof dist === 'string' ? dist : dist.fullpath;
@@ -44,6 +52,7 @@ module.exports = function ({
         ext: `.${format}`,
         args: []
     }];
-    _build(...args);
-    if (watch) _watch(...args, srcPath, distPath);
+    const build = _build(via);
+    build(...args);
+    if (watch) _watch(build)(...args, srcPath, distPath);
 }

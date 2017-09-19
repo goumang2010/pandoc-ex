@@ -70,7 +70,8 @@ const getFormat = (format) => format ? format : inquirer
     }]).then((answer) => answer.format);
 async function main() {
     const {
-        watch
+        watch,
+        via
     } = argv;
     const format = await getFormat(argv.format);
     const src = await getSrcFolder(argv.src);
@@ -83,6 +84,7 @@ async function main() {
         src,
         dist,
         watch,
+        via,
         macro,
         format
     });
