@@ -4,7 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var gulp = require('gulp');
 var inquirer = require('inquirer');
-var build = require('./build');
+var build = require('./src/build');
 var ora = require('ora');
 var argv = require('minimist')(process.argv.slice(2));
 
