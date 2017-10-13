@@ -41,7 +41,8 @@ module.exports = function ({
     format,
     macro,
     watch,
-    via
+    via,
+    other
 }) {
     const srcPath = typeof src === 'string' ? src : src.fullpath;
     const distPath = typeof dist === 'string' ? dist : dist.fullpath;
@@ -50,7 +51,7 @@ module.exports = function ({
         from: 'markdown',
         to: format,
         ext: `.${format}`,
-        args: []
+        args: Object.keys(other).map((key) => `--${key}=${other[key]}`)
     }];
     const build = _build(via);
     build(...args);

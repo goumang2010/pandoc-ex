@@ -4,8 +4,9 @@ var fs = require('fs');
 var path = require('path');
 var gulp = require('gulp');
 var inquirer = require('inquirer');
-var build = require('./src/build');
 var ora = require('ora');
+var omit = require('lodash.omit');
+var build = require('./src/build');
 var argv = require('minimist')(process.argv.slice(2));
 
 
@@ -77,17 +78,20 @@ async function main() {
     const src = await getSrcFolder(argv.src);
     const dist = await getDistFolder(argv.dist);
     const macro = await getMacroFile(argv.macro);
-    console.log(`Source files folder:`, src);
-    console.log(`Dist files folder:`, dist);
-    const spinner = ora(`${watch ? 'Watching' : 'Writing'} markdown files ...`).start();
-    await build({
+    const option = {
         src,
         dist,
         watch,
         via,
         macro,
-        format
-    });
+        format,
+    };
+    const other = omit(argv, ['_', ...Object.keys(option)]);
+    option.other = other;
+    console.log(`Source files folder:`, src);
+    console.log(`Dist files folder:`, dist);
+    const spinner = ora(`${watch ? 'Watching' : 'Writing'} markdown files ...`).start();
+    await build(option);
 
 }
 
