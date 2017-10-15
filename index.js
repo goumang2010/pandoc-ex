@@ -8,7 +8,7 @@ var ora = require('ora');
 var omit = require('lodash.omit');
 var chalk = require('chalk');
 var build = require('./src/build');
-var pkg  = require('./package');
+var pkg = require('./package');
 var argv = require('minimist')(process.argv.slice(2));
 
 const println = (...str) => {
@@ -23,11 +23,11 @@ const help = () => {
     println();
     println('  options:');
     println();
-    println('  --src=DIRECTORY ' , 'specify the source folder(absolute/relative path)');
-    println('  --dist=DIRECTORY' , 'specify the destination folder(absolute/relative path)');
-    println('  --from=FORMAT   ' , 'source format, default is markdown');
-    println('  --to=FORMAT     ' , 'target format, default is docx');
-    println('  --via=FORMAT    ' , 'middle format for transformation, from -> via -> to')
+    println('  --src=DIRECTORY ', 'specify the source folder(absolute/relative path)');
+    println('  --dist=DIRECTORY', 'specify the destination folder(absolute/relative path)');
+    println('  --from=FORMAT   ', 'source format, default is markdown');
+    println('  --to=FORMAT     ', 'target format, default is docx');
+    println('  --via=FORMAT    ', 'middle format for transformation, from -> via -> to')
     println('for more information, please visit: https://github.com/jgm/pandoc/issues/3924/');
     println('  --macro=FILENAME' , 'specify pp macro file, you can find some in: https://github.com/tajmone/pandoc-goodies/tree/master/pp/macros');
     println('  --watch         ' , 'watch the source files');
@@ -104,16 +104,23 @@ const getFormat = (format, key, _default) => format ? format : inquirer
         message: `Which to for the ${key}?`,
         default: _default
     }]).then((answer) => answer.format);
+
+const getWatchOption = (watch, defaultAnswer = true) => watch != null ? !!watch : inquirer
+    .prompt([{
+        type: 'confirm',
+        name: 'watch',
+        message: 'Watch files?',
+        default: defaultAnswer
+    }]).then((answer) => answer.watch);
+
 async function main() {
-    const {
-        watch,
-        via
-    } = argv;
+    const { via } = argv;
     const from = await getFormat(argv.from, 'source format', 'markdown');
     const to = await getFormat(argv.to, 'target format', 'docx');
     const src = await getSrcFolder(argv.src);
     const dist = await getDistFolder(argv.dist);
     const macro = await getMacroFile(argv.macro);
+    const watch = await getWatchOption(argv.watch);
     const option = {
         src,
         dist,
