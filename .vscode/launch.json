@@ -8,15 +8,24 @@
             "type": "node",
             "request": "attach",
             "name": "Attach",
-            "port": 5858
+            "port": 9280
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Launch local",
             "program": "${workspaceRoot}/index.js",
             "args": [
-                "--watch", "--src=./test/src", "--dist=./test/dist", "--macro=./macros/macros.pp"
+                "--watch", "--to=docx", "--from=markdown", "--src=./test/src", "--reference-docx=/Users/lizhongning/Documents/p/doc/template.docx", "--dist=./test/dist", "--macro=./macros/macros.pp"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch local raw",
+            "program": "${workspaceRoot}/index.js",
+            "args": [
             ],
             "console": "integratedTerminal"
         }

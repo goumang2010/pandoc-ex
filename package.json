@@ -9,6 +9,7 @@
     "src"
   ],
   "scripts": {
+    "dev": "node --inspect=9280 index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
