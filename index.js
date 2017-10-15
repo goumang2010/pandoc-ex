@@ -6,9 +6,41 @@ var gulp = require('gulp');
 var inquirer = require('inquirer');
 var ora = require('ora');
 var omit = require('lodash.omit');
+var chalk = require('chalk');
 var build = require('./src/build');
+var pkg  = require('./package');
 var argv = require('minimist')(process.argv.slice(2));
 
+const println = (...str) => {
+    process.stdout.write(`${str && str.join(' ') || ''}\n`);
+};
+
+const help = () => {
+    println();
+    println(chalk.gray(`${pkg.name} - ${pkg.version}`));
+    println();
+    println('  Usage: pandox-ex [options]');
+    println();
+    println('  options:');
+    println();
+    println('  --src=DIRECTORY ' , 'specify the source folder(absolute/relative path)');
+    println('  --dist=DIRECTORY' , 'specify the destination folder(absolute/relative path)');
+    println('  --from=FORMAT   ' , 'source format, default is markdown');
+    println('  --to=FORMAT     ' , 'target format, default is docx');
+    println('  --via=FORMAT    ' , 'middle format for transformation, from -> via -> to')
+    println('for more information, please visit: https://github.com/jgm/pandoc/issues/3924/');
+    println('  --macro=FILENAME' , 'specify pp macro file, you can find some in: https://github.com/tajmone/pandoc-goodies/tree/master/pp/macros');
+    println('  --watch         ' , 'watch the source files');
+    println('  --help         ');
+    println();
+    println('  other pandoc option is available, note that path option should be filled with absolute path other than relative path');
+    println();
+}
+
+if (argv.help) {
+    help();
+    return;
+}
 
 const readDir = (_fullpath) => fs.existsSync(_fullpath) ? fs.readdirSync(_fullpath).map(x => ({
     path: x,
