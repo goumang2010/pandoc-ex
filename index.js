@@ -129,7 +129,7 @@ async function main() {
     console.log(`Dist files folder:`, dist);
     const spinner = ora(`${watch ? 'Watching' : 'Writing'} markdown files ...`).start();
     await build(option);
-
+    if (!watch) spinner.stop();
 }
 
 main().catch(err => console.error(err));
