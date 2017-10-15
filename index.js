@@ -62,19 +62,19 @@ const getMacroFile = (macro, defaultAnswer = false) => macro ? path.resolve(cwd,
 
 const getSrcFolder = (src) => src ? path.resolve(cwd, src) : getSrcName(rootFolders);
 const getDistFolder = (dist) => dist ? path.resolve(cwd, dist) : getDistName(rootFolders);
-const getFormat = (format) => format ? format : inquirer
+const getFormat = (to) => to ? to : inquirer
     .prompt([{
         type: 'input',
-        name: 'format',
-        message: `Which format for the target?`,
+        name: 'to',
+        message: `Which to for the target?`,
         default: 'docx'
-    }]).then((answer) => answer.format);
+    }]).then((answer) => answer.to);
 async function main() {
     const {
         watch,
         via
     } = argv;
-    const format = await getFormat(argv.format);
+    const to = await getFormat(argv.to);
     const src = await getSrcFolder(argv.src);
     const dist = await getDistFolder(argv.dist);
     const macro = await getMacroFile(argv.macro);
@@ -84,7 +84,7 @@ async function main() {
         watch,
         via,
         macro,
-        format,
+        to,
     };
     const other = omit(argv, ['_', ...Object.keys(option)]);
     option.other = other;

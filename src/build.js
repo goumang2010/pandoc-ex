@@ -38,7 +38,7 @@ const _watch = build => (src, dest, option, srcPath, distPath) => {
 module.exports = function ({
     src,
     dist,
-    format,
+    to,
     macro,
     watch,
     via,
@@ -49,8 +49,8 @@ module.exports = function ({
     const args = [path.join(srcPath, '*.md'), `${distPath}/`.replace(/\/+$/, '/'), {
         macro,
         from: 'markdown',
-        to: format,
-        ext: `.${format}`,
+        to: to,
+        ext: `.${to}`,
         args: Object.keys(other).map((key) => `--${key}=${other[key]}`)
     }];
     const build = _build(via);
