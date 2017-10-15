@@ -60,8 +60,11 @@ const getFolderName = (purpose) => function (folderList) {
             choices: folderList.map(x => x.path)
         }]).then((answer) => {
             var pathObj = folderList.find(x => x.path === answer.option);
+            if (pathObj.path === './') return pathObj.fullpath;
             var subFolders = getSubFolders(pathObj.fullpath);
-            return subFolders.length ? callee(subFolders) : pathObj.fullpath;
+            var current = Object.assign({}, pathObj, { path: './' });
+            var optionFolders = [current, ...subFolders];
+            return subFolders.length ? callee(optionFolders) : pathObj.fullpath;
         });
 }
 const cwd = process.cwd();
