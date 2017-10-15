@@ -38,6 +38,7 @@ const _watch = build => (src, dest, option, srcPath, distPath) => {
 module.exports = function ({
     src,
     dist,
+    from,
     to,
     macro,
     watch,
@@ -48,7 +49,7 @@ module.exports = function ({
     const distPath = typeof dist === 'string' ? dist : dist.fullpath;
     const args = [path.join(srcPath, '*.md'), `${distPath}/`.replace(/\/+$/, '/'), {
         macro,
-        from: 'markdown',
+        from,
         to: to,
         ext: `.${to}`,
         args: Object.keys(other).map((key) => `--${key}=${other[key]}`)
